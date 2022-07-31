@@ -35,7 +35,7 @@ const Input = () => {
 const styles = StyleSheet.create({
   root: {
     flexDirection: 'row',
-    padding: 5,
+    padding: 10,
     borderTopWidth: 1,
     borderColor: colors.border,
     alignItems: 'flex-end',
@@ -54,11 +54,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginLeft: 5,
     paddingRight: 50,
+    height:40,
   },
   button: {
     position: 'absolute',
-    right: 15,
-    top: 15,
+    right: 25,
+    top: 22,
     fontSize: fonts.size.s,
     fontWeight: fonts.weight.full,
     color: colors.primary,

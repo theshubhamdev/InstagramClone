@@ -4,12 +4,12 @@ import font from "../../theme/fonts";
 
 export default StyleSheet.create({
   post: {
-    marginTop:50
+    backgroundColor: colors.black
   },
   header: {
     flexDirection: "row",
     padding: 10,
-    alignItems:"center"
+    alignItems: "center",
   },
   userAvatar: {
     width: 50,
@@ -19,7 +19,7 @@ export default StyleSheet.create({
   },
   username: {
     fontWeight: font.weight.bold,
-    color:colors.black
+    color: colors.white
   },
   threeDots: {
     marginLeft:"auto"
@@ -38,7 +38,7 @@ export default StyleSheet.create({
     fontWeight:"bold"
   },
   text: {
-    color: colors.black,
+    color: colors.white,
     lineHeight:18
   },
   icon: {

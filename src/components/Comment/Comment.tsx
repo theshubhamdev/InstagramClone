@@ -2,7 +2,8 @@ import {View, Text, StyleSheet, Image, Pressable} from 'react-native';
 import React, {useState} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import colors from '../../theme/colors';
-import {IComment} from '../../types/models';
+import { Comment as IComment } from '../../API';
+import { DEFAULT_USER_IMAGE } from '../../config';
 
 interface ICommentProps {
   comment: IComment;
@@ -18,11 +19,11 @@ const Comment = ({comment, includeDetails = false}: ICommentProps) => {
   return (
     <View style={styles.comment}>
       {includeDetails && (
-        <Image source={{uri: comment.user.image}} style={styles.avatar} />
+        <Image source={{uri: comment.User?.image || DEFAULT_USER_IMAGE}} style={styles.avatar} />
       )}
       <View style={styles.middleColumn}>
         <Text style={styles.commentText}>
-          <Text style={styles.bold}>{comment.user.username}</Text>{' '}
+          <Text style={styles.bold}>{comment.User?.username}</Text>{' '}
           {comment.comment}
         </Text>
         {includeDetails && (
@@ -36,7 +37,6 @@ const Comment = ({comment, includeDetails = false}: ICommentProps) => {
       <Pressable onPress={toggleLike} hitSlop={5}>
         <AntDesign
           name={isLiked ? 'heart' : 'hearto'}
-          s
           color={isLiked ? colors.accent : colors.black}
         />
       </Pressable>
@@ -48,12 +48,14 @@ const styles = StyleSheet.create({
   comment: {
     flexDirection: 'row',
     alignItems: 'center',
+    color: colors.white,
+    backgroundColor: colors.black
   },
   bold: {
     fontWeight: 'bold',
   },
   commentText: {
-    color: colors.black,
+    color: colors.white
   },
   avatar: {
     width: 40,
@@ -70,6 +72,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     marginRight: 10,
+    color: colors.lightgrey
   },
 });
 

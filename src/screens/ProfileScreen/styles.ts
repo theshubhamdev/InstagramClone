@@ -5,12 +5,13 @@ import fonts from '../../theme/fonts';
 export const styles = StyleSheet.create({
   root: {
     padding: 10,
+    backgroundColor: colors.black,
   },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-      justifyContent: 'space-between',
-    marginVertical:10
+    justifyContent: 'space-between',
+    marginVertical: 10,
   },
   avatar: {
     width: 100,
@@ -23,10 +24,16 @@ export const styles = StyleSheet.create({
   numberText: {
     fontSize: fonts.size.md,
     fontWeight: fonts.weight.full,
-    color: colors.black,
+    color: colors.white
   },
   name: {
     fontWeight: fonts.weight.semi,
-    color: colors.black,
+    color: colors.white
   },
+  textColor: {
+    color: colors.white
+  },
+  bio: {
+    color:colors.lightgrey
+  }
 });

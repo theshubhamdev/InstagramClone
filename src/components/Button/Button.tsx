@@ -17,16 +17,16 @@ const Button = ({text = '', onPress = () => {}}: IButton) => {
 
 const styles = StyleSheet.create({
     container: {
-      flex:1,
+    flex:1,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 5,
     padding: 5,
-        alignItems: 'center',
+    alignItems: 'center',
     margin:5
   },
   text: {
-    color: colors.black,
+    color: colors.white,
     fontWeight: fonts.weight.semi,
   },
 });

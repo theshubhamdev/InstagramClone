@@ -10,19 +10,30 @@ import DoublePressable from '../DoublePressable/DoublePressable';
 
 import styles from './styles';
 import Comment from '../Comment';
-import {IPost} from '../../types/models';
 import Carousel from '../Carousel/Carousel';
 import VideoPlayer from '../VideoPlayer/VideoPlayer';
+import {useNavigation} from '@react-navigation/native';
+import {FeedNavigationProp} from '../../types/navigation';
+import {DEFAULT_USER_IMAGE} from '../../config';
+import {Post} from '../../API';
 
 interface IFeedPost {
-  post: IPost;
+  post: Post;
   isVisible: boolean;
 }
 
-const FeedPost = ({post,isVisible}: IFeedPost) => {
+const FeedPost = ({post, isVisible}: IFeedPost) => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [isLiked, setIsLiked] = useState(true);
 
+  const navigation = useNavigation<FeedNavigationProp>();
+
+  const navigateToUser = () => {
+    navigation.navigate('UserProfile', {userId: post.User?.id || ''});
+  };
+  const navigateToComments = () => {
+    navigation.navigate('Comments', {postId: post.id});
+  };
   const toggleDescriptionExpanded = () => {
     setIsDescriptionExpanded(v => !v);
   };
@@ -31,6 +42,7 @@ const FeedPost = ({post,isVisible}: IFeedPost) => {
   };
 
   let content = null;
+  console.log(post);
 
   if (post.image) {
     content = (
@@ -38,21 +50,26 @@ const FeedPost = ({post,isVisible}: IFeedPost) => {
         <Image source={{uri: post.image}} style={styles.image} />
       </DoublePressable>
     );
-  } else if (post.images) {
-    content = (<Carousel images={post.images} onDoublePress={toggleLike} />);
-  }
-  else if (post.video) {
+  } else if (post.images && post.images.length > 0) {
+    content = <Carousel images={post.images} onDoublePress={toggleLike} />;
+  } else if (post.video) {
     content = (
       <DoublePressable onDoublePress={toggleLike}>
         <VideoPlayer uri={post.video} paused={!isVisible} />
-      </DoublePressable>)
+      </DoublePressable>
+    );
   }
 
   return (
     <View style={styles.post}>
       <View style={styles.header}>
-        <Image source={{uri: post.user.image}} style={styles.userAvatar} />
-        <Text style={styles.username}>{post.user.username}</Text>
+        <Image
+          source={{uri: post.User?.image || DEFAULT_USER_IMAGE}}
+          style={styles.userAvatar}
+        />
+        <Text onPress={navigateToUser} style={styles.username}>
+          {post.User?.username}
+        </Text>
         <Entypo name="dots-three-horizontal" style={styles.threeDots} />
       </View>
       {content}
@@ -63,7 +80,7 @@ const FeedPost = ({post,isVisible}: IFeedPost) => {
               name={isLiked ? 'heart' : 'hearto'}
               size={24}
               style={styles.icon}
-              color={isLiked ? colors.accent : colors.black}
+              color={isLiked ? colors.accent : colors.white}
             />
           </Pressable>
 
@@ -71,19 +88,19 @@ const FeedPost = ({post,isVisible}: IFeedPost) => {
             name="chatbubble-outline"
             size={24}
             style={styles.icon}
-            color={colors.black}
+            color={colors.white}
           />
           <Feather
             name="send"
             size={24}
             style={styles.icon}
-            color={colors.black}
+            color={colors.white}
           />
           <Feather
             name="bookmark"
             size={24}
             style={{marginLeft: 'auto'}}
-            color={colors.black}
+            color={colors.white}
           />
         </View>
 
@@ -97,19 +114,26 @@ const FeedPost = ({post,isVisible}: IFeedPost) => {
 
         {/* Post Description */}
         <Text style={styles.text} numberOfLines={isDescriptionExpanded ? 0 : 3}>
-          <Text style={styles.bold}>{post.user.username}</Text>{' '}
+          <Text style={styles.bold}>{post.User?.username}</Text>{' '}
           {post.description}
         </Text>
         <Text onPress={toggleDescriptionExpanded} style={{color: colors.grey}}>
           {isDescriptionExpanded ? 'see less' : 'see more'}
         </Text>
         {/* Comments */}
-        <Text style={{color: colors.grey}}>
+        <Text style={{color: colors.grey}} onPress={navigateToComments}>
           View all {post.nofComments} comments
         </Text>
-        {post.comments.map(comment => (
-          <Comment key={comment.id} comment={comment} />
-        ))}
+        {(post.Comments?.items || []).map(
+          comment =>
+            comment && (
+              <Comment
+                key={comment.id}
+                comment={comment}
+                includeDetails={false}
+              />
+            ),
+        )}
         {/* Posted Date */}
         <Text style={{color: colors.grey}}>{post.createdAt}</Text>
       </View>
