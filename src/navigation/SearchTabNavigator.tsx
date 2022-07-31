@@ -1,6 +1,6 @@
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import React from "react";
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import CommentsScreen from '../screens/CommentsScreen';
-import HomeScreen from '../screens/HomeScreen';
 import UserSearchScreen from '../screens/UserSearchScreen';
 import colors from '../theme/colors';
 import { SearchTabNavigatorParamList } from '../types/navigation';

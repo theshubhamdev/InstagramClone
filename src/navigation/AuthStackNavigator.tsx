@@ -1,4 +1,5 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React from "react";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {AuthStackNavigatorParamList} from '../types/navigation';
 import SignInScreen from '../screens/Auth/SignInScreen';
 import SignUpScreen from '../screens/Auth/SignUpScreen';

@@ -1,5 +1,5 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/HomeScreen';
+import React from "react";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import PostUploadScreen from '../screens/PostUploadScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
