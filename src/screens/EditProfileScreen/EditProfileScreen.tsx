@@ -1,6 +1,5 @@
-import React from 'react';
-import { View, Text, Image, ActivityIndicator, Alert } from 'react-native';
-import {useEffect, useState} from 'react';
+import {View, Text, Image, ActivityIndicator, Alert} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {launchImageLibrary, Asset} from 'react-native-image-picker';
 import {
@@ -10,11 +9,13 @@ import {
   GetUserQueryVariables,
   UpdateUserMutation,
   UpdateUserMutationVariables,
+  UsersByUsernameQuery,
+  UsersByUsernameQueryVariables,
   User,
 } from '../../API';
 import {useAuthContext} from '../../contexts/AuthContext';
-import {useMutation, useQuery} from '@apollo/client';
-import {deleteUser, getUser, updateUser} from './queries';
+import {useMutation, useQuery, useLazyQuery} from '@apollo/client';
+import {deleteUser, getUser, updateUser, usersByUsername} from './queries';
 import ApiErrorMessage from '../../components/ApiErrorMessage';
 import {useNavigation} from '@react-navigation/core';
 import {DEFAULT_USER_IMAGE} from '../../config';
@@ -39,6 +40,7 @@ const EditProfileScreen = () => {
 
   const user = data?.getUser;
 
+  const [getUsersByUsername] = useLazyQuery<UsersByUsernameQuery,UsersByUsernameQueryVariables>(usersByUsername)
   const [runUpdateUser, {loading: updateLoading, error: updateError}] =
     useMutation<UpdateUserMutation, UpdateUserMutationVariables>(updateUser);
 
@@ -57,7 +59,9 @@ const EditProfileScreen = () => {
     await runUpdateUser({
       variables: {input: {id: userId, ...formData, _version: user?._version}},
     });
-    navigation.goBack();
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    }
   };
 
   const confirmDelete = () => {
@@ -103,6 +107,28 @@ const EditProfileScreen = () => {
     );
   };
 
+  const validateUsername = async (username: string) => {
+    // query the database based on the usersByUsername
+
+    try {
+      const response = await getUsersByUsername({ variables: { username } })
+      console.log(response);
+      if (response.error) {
+        Alert.alert("Failed to fetch username");
+        return 'Failed to fetch username';
+      }
+      const users = response.data?.usersByUsername?.items;
+      if (users && users?.length > 0 && users[0]?.id !== userId) {
+        return 'Username is already taken';
+      }
+    } catch (error) {
+      Alert.alert("Failed to fetch username", error);
+    }
+
+    // if there are any users with this username, then return the error
+    return true;
+  };
+
   if (loading) {
     return <ActivityIndicator />;
   }
@@ -139,6 +165,7 @@ const EditProfileScreen = () => {
           minLength: {
             value: 3,
             message: 'Username must be at least of 3 Characters',
+            validate: validateUsername
           },
         }}
         label="Username"

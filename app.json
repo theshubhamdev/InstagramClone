@@ -1,10 +1,4 @@
 {
   "name": "notJustPhotos",
-  "displayName": "InstagramClone",
-  "android": {
-    "package": "com.jordanrock.instagramclone"
-  },
-  "ios": {
-    "bundleIdentifier": "com.jordanrock.instagramclone"
-  }
+  "displayName": "Instagram"
 }

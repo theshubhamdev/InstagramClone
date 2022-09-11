@@ -16,6 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 import {FeedNavigationProp} from '../../types/navigation';
 import {DEFAULT_USER_IMAGE} from '../../config';
 import {Post} from '../../API';
+import React from 'react';
 
 interface IFeedPost {
   post: Post;
@@ -41,7 +42,7 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
     setIsLiked(v => !v);
   };
 
-  let content = null;
+  let content: JSX.Element | null = null;
   console.log(post);
 
   if (post.image) {

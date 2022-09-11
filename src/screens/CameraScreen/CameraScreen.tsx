@@ -16,7 +16,7 @@ const flashModeToIcon = {
   [FlashMode.auto]: 'flash-auto',
   [FlashMode.torch]: 'highlight',
 };
-const PostUploadScreen = () => {
+const CameraScreen = () => {
   const [hasPermissions, setHasPermissions] = useState<boolean | null>(null);
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
   const [flash, setFlash] = useState(FlashMode.off);
@@ -166,4 +166,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostUploadScreen;
+export default CameraScreen;

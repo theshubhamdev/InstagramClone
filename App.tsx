@@ -7,6 +7,7 @@ import AuthContextProvider from './src/contexts/AuthContext';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import colors from './src/theme/colors';
 import Client from './src/apollo/Client';
+import React from 'react';
 
 const urlOpener = async (url: string, redirectUrl: string) => {
   await InAppBrowser.isAvailable();

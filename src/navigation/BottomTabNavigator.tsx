@@ -1,6 +1,5 @@
 import React from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import PostUploadScreen from '../screens/PostUploadScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -10,6 +9,7 @@ import HomeStackNavigator from './HomeStackNavigator';
 import ProfileStackNavigator from './ProfileStackNavigator';
 import { BottomTabNavigatorParamList } from '../types/navigation';
 import SearchTabNavigator from './SearchTabNavigator';
+import CameraScreen from "../screens/CameraScreen";
 
 const Tab = createBottomTabNavigator<BottomTabNavigatorParamList>();
 
@@ -43,7 +43,7 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen
         name="Upload"
-        component={PostUploadScreen}
+        component={CameraScreen}
         options={{
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons

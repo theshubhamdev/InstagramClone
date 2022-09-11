@@ -11,6 +11,7 @@ import {useQuery} from '@apollo/client';
 import {ListCommentsQueryVariables, ListPostsQuery} from '../../API';
 import {listPosts} from './queries';
 import ApiErrorMessage from '../../components/ApiErrorMessage';
+import React from 'react';
 
 const HomeScreen = () => {
   const [activePostId, setActivePostId] = useState<string | null>(null);

@@ -16,6 +16,7 @@ import {Auth} from 'aws-amplify';
 import {useState} from 'react';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import colors from '../../../theme/colors';
+import React from 'react';
 
 type SignInData = {
   email: string;
