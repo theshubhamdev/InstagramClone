@@ -9,6 +9,9 @@ import Client from './src/apollo/Client';
 import React from 'react';
 import {MenuProvider} from 'react-native-popup-menu';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import relativeTime from "dayjs/plugin/relativeTime"
+import dayjs from 'dayjs';
+dayjs.extend(relativeTime);
 
 const urlOpener = async (url: string, redirectUrl: string) => {
   await InAppBrowser.isAvailable();

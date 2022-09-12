@@ -39,6 +39,7 @@ const CreatePostScreen = () => {
       const response = await runCreatePost({
         variables: {
           input: {
+            type: "POST",
             description,
             image: image,
             images: images,

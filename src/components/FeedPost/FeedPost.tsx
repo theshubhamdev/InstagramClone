@@ -19,6 +19,7 @@ import VideoPlayer from "../VideoPlayer/VideoPlayer";
 import styles from "./styles";
 import PostMenu from "./PostMenu";
 import useLikeService from "../../services/LikeService/LikeService";
+import dayjs from "dayjs";
 
 interface IFeedPost {
   post: Post;
@@ -158,7 +159,7 @@ const FeedPost = ({ post, isVisible }: IFeedPost) => {
             )
         )}
         {/* Posted Date */}
-        <Text style={{ color: colors.grey }}>{post.createdAt}</Text>
+        <Text style={{ color: colors.grey }}>{dayjs( post.createdAt).fromNow()}</Text>
       </View>
     </View>
   );

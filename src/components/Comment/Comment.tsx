@@ -4,6 +4,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import colors from '../../theme/colors';
 import { Comment as IComment } from '../../API';
 import { DEFAULT_USER_IMAGE } from '../../config';
+import dayjs from 'dayjs';
 
 interface ICommentProps {
   comment: IComment;
@@ -28,7 +29,7 @@ const Comment = ({comment, includeDetails = false}: ICommentProps) => {
         </Text>
         {includeDetails && (
           <View style={styles.footer}>
-            <Text style={styles.footerText}>2d</Text>
+            <Text style={styles.footerText}>{dayjs(comment.createdAt).fromNow()}</Text>
             <Text style={styles.footerText}>5 likes</Text>
             <Text style={styles.footerText}>Reply</Text>
           </View>
