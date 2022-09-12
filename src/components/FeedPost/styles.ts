@@ -41,4 +41,7 @@ export default StyleSheet.create({
   icon: {
     marginHorizontal: 5,
   },
+  textColor: {
+    color: colors.white
+  }
 })

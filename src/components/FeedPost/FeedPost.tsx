@@ -6,11 +6,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Feather from "react-native-vector-icons/Feather";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import {
-  CreateLikeMutation,
-  CreateLikeMutationVariables,
-  Post,
-} from "../../API";
+import { Post } from "../../API";
 import { DEFAULT_USER_IMAGE } from "../../config";
 import colors from "../../theme/colors";
 import font from "../../theme/fonts";
@@ -22,9 +18,7 @@ import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
 import styles from "./styles";
 import PostMenu from "./PostMenu";
-import { useMutation } from "@apollo/client";
-import { createLike } from "./queries";
-import { useAuthContext } from "../../contexts/AuthContext";
+import useLikeService from "../../services/LikeService/LikeService";
 
 interface IFeedPost {
   post: Post;
@@ -33,27 +27,26 @@ interface IFeedPost {
 
 const FeedPost = ({ post, isVisible }: IFeedPost) => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
 
-  const { userId } = useAuthContext();
-  
-  const [runCreateLike] = useMutation<
-    CreateLikeMutation,
-    CreateLikeMutationVariables
-  >(createLike, { variables: { input: { userID: userId, postID: post.id } } });
+  const { toggleLike, isLiked } = useLikeService(post);
+
+  const postLikes = post.Likes?.items.filter((like) => !like?._deleted) || [];
   const navigation = useNavigation<FeedNavigationProp>();
 
   const navigateToUser = () => {
     navigation.navigate("UserProfile", { userId: post.User?.id || "" });
   };
+
   const navigateToComments = () => {
     navigation.navigate("Comments", { postId: post.id });
   };
+
+  const navigateToLikesPage = () => {
+    navigation.navigate("PostLikes", { id: post.id });
+  };
+
   const toggleDescriptionExpanded = () => {
     setIsDescriptionExpanded((v) => !v);
-  };
-  const toggleLike = async () => {
-    const response = await runCreateLike();
   };
 
   let content: JSX.Element | null = null;
@@ -119,13 +112,26 @@ const FeedPost = ({ post, isVisible }: IFeedPost) => {
         </View>
 
         {/* Likes */}
-        <Text>
-          Liked by <Text style={styles.bold}>raghuvansiayush</Text> and{" "}
-          <Text style={{ fontWeight: font.weight.bold }}>
-            {post.nofLikes} others
+        {postLikes.length <= 0 ? (
+          <Text style={styles.textColor}>
+            Be the first one to like the post
           </Text>
-        </Text>
-
+        ) : (
+          <Text style={[styles.textColor]} onPress={navigateToLikesPage}>
+            Liked by{" "}
+            <Text style={[styles.textColor, styles.bold]}>
+              {postLikes[0]?.User?.username}
+            </Text>{" "}
+            {postLikes.length > 1 && (
+              <>
+                and{" "}
+                <Text style={{ fontWeight: font.weight.bold }}>
+                  {postLikes.length - 1} others
+                </Text>
+              </>
+            )}
+          </Text>
+        )}
         {/* Post Description */}
         <Text style={styles.text} numberOfLines={isDescriptionExpanded ? 0 : 3}>
           <Text style={styles.bold}>{post.User?.username}</Text>{" "}
