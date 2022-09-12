@@ -34,7 +34,7 @@ const HomeScreen = () => {
   if (loading) {
     return <ActivityIndicator />;
   }
-  const posts = data?.listPosts?.items;
+  const posts = (data?.listPosts?.items || []).filter(post => !post?._deleted);
 
   if (error || !posts) {
     return (

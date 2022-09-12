@@ -50,7 +50,7 @@ const EditProfileScreen = () => {
     if (user) {
       setValue('name', user.name);
       setValue('bio', user.bio);
-      setValue('username', user.username);
+      setValue('username', user.username?.toLowerCase());
       setValue('website', user.website);
     }
   }, [user]);
@@ -111,8 +111,8 @@ const EditProfileScreen = () => {
     // query the database based on the usersByUsername
 
     try {
-      const response = await getUsersByUsername({ variables: { username } })
-      console.log(response);
+      const response = await getUsersByUsername({ variables: { username: username.toLowerCase() } })
+      console.log("response", response);
       if (response.error) {
         Alert.alert("Failed to fetch username");
         return 'Failed to fetch username';

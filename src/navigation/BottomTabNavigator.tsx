@@ -9,7 +9,7 @@ import HomeStackNavigator from './HomeStackNavigator';
 import ProfileStackNavigator from './ProfileStackNavigator';
 import { BottomTabNavigatorParamList } from '../types/navigation';
 import SearchTabNavigator from './SearchTabNavigator';
-import CameraScreen from "../screens/CameraScreen";
+import UploadStackNavigator from "./UploadStackNavigator";
 
 const Tab = createBottomTabNavigator<BottomTabNavigatorParamList>();
 
@@ -43,7 +43,7 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen
         name="Upload"
-        component={CameraScreen}
+        component={UploadStackNavigator}
         options={{
           tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons

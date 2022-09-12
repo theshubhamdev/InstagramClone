@@ -3,6 +3,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Camera, CameraPictureOptions, CameraRecordingOptions, FlashMode} from 'expo-camera';
 import colors from '../../theme/colors';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/core';
+import { CreateNavigationProp } from '../../types/navigation';
 
 const flashModes = [
   FlashMode.off,
@@ -24,6 +26,8 @@ const CameraScreen = () => {
   const [isRecording, setIsRecording] = useState(false)
 
   const camera = useRef<Camera>(null)
+  const navigation = useNavigation<CreateNavigationProp>();
+
   useEffect(() => {
     const getPermissions = async () => {
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
@@ -92,6 +96,10 @@ const CameraScreen = () => {
   }
   }
   
+  const navigateToCreateScreen = () => { 
+    navigation.navigate("Create", { images: ["https://notjustdev-dummy.s3.us-east-2.amazonaws.com/images/1.jpg","https://notjustdev-dummy.s3.us-east-2.amazonaws.com/images/2.jpg"]});
+  }
+
   if (hasPermissions === null) {
     return <Text>Loading ...</Text>;
   }
@@ -122,8 +130,10 @@ const CameraScreen = () => {
         </Pressable>
         <MaterialIcons name="settings" size={30} color={colors.white} />
       </View>
-      <View style={[styles.buttonsContainer, {bottom: 20}]}>
+      <View style={[styles.buttonsContainer, { bottom: 20 }]}>
+        <Pressable onPress={navigateToCreateScreen}>
         <MaterialIcons name="photo-library" size={30} color={colors.white} />
+        </Pressable>
         {isCameraReady && (
           <Pressable onPress={takePicture} onLongPress={startRecording} onPressOut={stopRecording}>
             <View style={[styles.circle, {backgroundColor: isRecording ? colors.accent : colors.white}]} />

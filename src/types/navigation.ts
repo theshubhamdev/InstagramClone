@@ -1,6 +1,6 @@
-import {RouteProp} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import { RouteProp } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 
 export type RootNavigatorParamList = {
   Auth: undefined;
@@ -22,80 +22,110 @@ export type SearchTabNavigatorParamList = {
   Posts: undefined;
 };
 
+export type UploadStackNavigatorParamList = {
+  Camera: undefined;
+  Create: {
+    image?: string;
+    images?: string[];
+    video?: string;
+  };
+};
+
+export type CameraNavigationProp = NativeStackNavigationProp<
+  UploadStackNavigatorParamList,
+  "Camera"
+>;
+
+export type CreateNavigationProp = NativeStackNavigationProp<
+  UploadStackNavigatorParamList,
+  "Create"
+>;
+
+export type CreateRouteProp = RouteProp<
+  UploadStackNavigatorParamList,
+  "Create"
+>;
+
 export type MyProfileNavigationProp = BottomTabNavigationProp<
   BottomTabNavigatorParamList,
-  'MyProfile'
+  "MyProfile"
 >;
 
 export type MyProfileRouteProp = RouteProp<
   BottomTabNavigatorParamList,
-  'MyProfile'
+  "MyProfile"
 >;
 
 export type HomeStackNavigatorParamList = {
   Feed: undefined;
-  UserProfile: {userId: string};
+  UserProfile: { userId: string };
+  UpdatePost: { id: string };
 };
+
+export type UpdatePostRouteProp = RouteProp<
+  HomeStackNavigatorParamList,
+  "UpdatePost"
+  >;
 
 export type UserProfileNavigationProp = NativeStackNavigationProp<
   HomeStackNavigatorParamList,
-  'UserProfile'
+  "UserProfile"
 >;
 
 export type UserProfileRouteProp = RouteProp<
   HomeStackNavigatorParamList,
-  'UserProfile'
+  "UserProfile"
 >;
 
 export type FeedNavigationProp = NativeStackNavigationProp<
   HomeStackNavigatorParamList,
-  'Feed'
+  "Feed"
 >;
 
 export type ProfileStackNavigatorParamList = {
   Profile: undefined;
-  'Edit Profile': undefined;
+  "Edit Profile": undefined;
 };
 
 export type ProfileNavigationProp = NativeStackNavigationProp<
   ProfileStackNavigatorParamList,
-  'Profile'
+  "Profile"
 >;
 
 // Auth Stack Navigator
 export type AuthStackNavigatorParamList = {
-  'Sign in': undefined;
-  'Sign up': undefined;
-  'Confirm email': {username?: string};
-  'Forgot password': undefined;
-  'New password': undefined;
+  "Sign in": undefined;
+  "Sign up": undefined;
+  "Confirm email": { username?: string };
+  "Forgot password": undefined;
+  "New password": undefined;
 };
 
 export type SignInNavigationProp = NativeStackNavigationProp<
   AuthStackNavigatorParamList,
-  'Sign in'
+  "Sign in"
 >;
 
 export type SignUpNavigationProp = NativeStackNavigationProp<
   AuthStackNavigatorParamList,
-  'Sign up'
+  "Sign up"
 >;
 
 export type ConfirmEmailNavigationProp = NativeStackNavigationProp<
   AuthStackNavigatorParamList,
-  'Confirm email'
+  "Confirm email"
 >;
 export type ConfirmEmailRouteProp = RouteProp<
   AuthStackNavigatorParamList,
-  'Confirm email'
+  "Confirm email"
 >;
 
 export type ForgotPasswordNavigationProp = NativeStackNavigationProp<
   AuthStackNavigatorParamList,
-  'Forgot password'
+  "Forgot password"
 >;
 
 export type NewPasswordNavigationProp = NativeStackNavigationProp<
   AuthStackNavigatorParamList,
-  'New password'
+  "New password"
 >;

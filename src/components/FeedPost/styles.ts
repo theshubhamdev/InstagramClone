@@ -21,9 +21,6 @@ export default StyleSheet.create({
     fontWeight: font.weight.bold,
     color: colors.white
   },
-  threeDots: {
-    marginLeft:"auto"
-  },
   image: {
     width: "100%",
     aspectRatio:1

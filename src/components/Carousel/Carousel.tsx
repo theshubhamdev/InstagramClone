@@ -1,4 +1,11 @@
-import {View, Image, FlatList, useWindowDimensions, ViewabilityConfig, ViewToken} from 'react-native';
+import {
+  View,
+  Image,
+  FlatList,
+  useWindowDimensions,
+  ViewabilityConfig,
+  ViewToken,
+} from 'react-native';
 import React, {useRef, useState} from 'react';
 import colors from '../../theme/colors';
 import DoublePressable from '../DoublePressable/DoublePressable';
@@ -10,16 +17,18 @@ interface ICarousel {
 
 const Carousel = ({images, onDoublePress = () => {}}: ICarousel) => {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-    const { width } = useWindowDimensions();
-    
-    const viewabilityConfig: ViewabilityConfig = {
-        itemVisiblePercentThreshold:51
-    }
-    const onViewableItemsChanged = useRef(( {viewableItems}: { viewableItems: Array<ViewToken> }) => {
-        if (viewableItems.length > 0) {
-            setActiveImageIndex(viewableItems[0].index || 0)
-        }
-    })
+  const {width} = useWindowDimensions();
+
+  const viewabilityConfig: ViewabilityConfig = {
+    itemVisiblePercentThreshold: 51,
+  };
+  const onViewableItemsChanged = useRef(
+    ({viewableItems}: {viewableItems: Array<ViewToken>}) => {
+      if (viewableItems.length > 0) {
+        setActiveImageIndex(viewableItems[0].index || 0);
+      }
+    },
+  );
   return (
     <View>
       <FlatList
@@ -30,9 +39,10 @@ const Carousel = ({images, onDoublePress = () => {}}: ICarousel) => {
           </DoublePressable>
         )}
         horizontal
-              pagingEnabled
-              viewabilityConfig={viewabilityConfig}
-              onViewableItemsChanged={onViewableItemsChanged.current}
+        pagingEnabled
+        viewabilityConfig={viewabilityConfig}
+        onViewableItemsChanged={onViewableItemsChanged.current}
+        showsHorizontalScrollIndicator={false}
       />
       <View
         style={{

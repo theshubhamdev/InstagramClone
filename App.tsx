@@ -4,10 +4,11 @@ import Amplify from 'aws-amplify';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import config from './src/aws-exports';
 import AuthContextProvider from './src/contexts/AuthContext';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
 import colors from './src/theme/colors';
 import Client from './src/apollo/Client';
 import React from 'react';
+import {MenuProvider} from 'react-native-popup-menu';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const urlOpener = async (url: string, redirectUrl: string) => {
   await InAppBrowser.isAvailable();
@@ -36,12 +37,19 @@ const updatedConfig = {
 Amplify.configure(updatedConfig);
 const App = () => {
   return (
-    <AuthContextProvider>
-      <Client>
-        <StatusBar backgroundColor={colors.black} barStyle={'light-content'} />
-        <Navigation />
-      </Client>
-    </AuthContextProvider>
+    <SafeAreaProvider>
+      <MenuProvider>
+        <AuthContextProvider>
+          <Client>
+            <StatusBar
+              backgroundColor={colors.black}
+              barStyle={'dark-content'}
+            />
+            <Navigation />
+          </Client>
+        </AuthContextProvider>
+      </MenuProvider>
+    </SafeAreaProvider>
   );
 };
 

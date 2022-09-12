@@ -1,54 +1,54 @@
-import {useState} from 'react';
-import {View, Text, Image, StyleSheet, Pressable} from 'react-native';
-import colors from '../../theme/colors';
-import font from '../../theme/fonts';
-import Entypo from 'react-native-vector-icons/Entypo';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Feather from 'react-native-vector-icons/Feather';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import DoublePressable from '../DoublePressable/DoublePressable';
+import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
+import React from "react";
+import { Image, Pressable, Text, View } from "react-native";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Feather from "react-native-vector-icons/Feather";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
-import styles from './styles';
-import Comment from '../Comment';
-import Carousel from '../Carousel/Carousel';
-import VideoPlayer from '../VideoPlayer/VideoPlayer';
-import {useNavigation} from '@react-navigation/native';
-import {FeedNavigationProp} from '../../types/navigation';
-import {DEFAULT_USER_IMAGE} from '../../config';
-import {Post} from '../../API';
-import React from 'react';
+import { Post } from "../../API";
+import { DEFAULT_USER_IMAGE } from "../../config";
+import colors from "../../theme/colors";
+import font from "../../theme/fonts";
+import { FeedNavigationProp } from "../../types/navigation";
+import Carousel from "../Carousel/Carousel";
+import Comment from "../Comment";
+import DoublePressable from "../DoublePressable/DoublePressable";
+import VideoPlayer from "../VideoPlayer/VideoPlayer";
+
+import styles from "./styles";
+import PostMenu from "./PostMenu";
 
 interface IFeedPost {
   post: Post;
   isVisible: boolean;
 }
 
-const FeedPost = ({post, isVisible}: IFeedPost) => {
+const FeedPost = ({ post, isVisible }: IFeedPost) => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [isLiked, setIsLiked] = useState(true);
 
   const navigation = useNavigation<FeedNavigationProp>();
 
   const navigateToUser = () => {
-    navigation.navigate('UserProfile', {userId: post.User?.id || ''});
+    navigation.navigate("UserProfile", { userId: post.User?.id || "" });
   };
   const navigateToComments = () => {
-    navigation.navigate('Comments', {postId: post.id});
+    navigation.navigate("Comments", { postId: post.id });
   };
   const toggleDescriptionExpanded = () => {
-    setIsDescriptionExpanded(v => !v);
+    setIsDescriptionExpanded((v) => !v);
   };
   const toggleLike = () => {
-    setIsLiked(v => !v);
+    setIsLiked((v) => !v);
   };
 
   let content: JSX.Element | null = null;
-  console.log(post);
 
   if (post.image) {
     content = (
       <DoublePressable onDoublePress={toggleLike}>
-        <Image source={{uri: post.image}} style={styles.image} />
+        <Image source={{ uri: post.image }} style={styles.image} />
       </DoublePressable>
     );
   } else if (post.images && post.images.length > 0) {
@@ -65,20 +65,20 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
     <View style={styles.post}>
       <View style={styles.header}>
         <Image
-          source={{uri: post.User?.image || DEFAULT_USER_IMAGE}}
+          source={{ uri: post.User?.image || DEFAULT_USER_IMAGE }}
           style={styles.userAvatar}
         />
         <Text onPress={navigateToUser} style={styles.username}>
           {post.User?.username}
         </Text>
-        <Entypo name="dots-three-horizontal" style={styles.threeDots} />
+        <PostMenu post={post}/>
       </View>
       {content}
       <View style={styles.footer}>
         <View style={styles.iconContainer}>
           <Pressable onPress={toggleLike}>
             <AntDesign
-              name={isLiked ? 'heart' : 'hearto'}
+              name={isLiked ? "heart" : "hearto"}
               size={24}
               style={styles.icon}
               color={isLiked ? colors.accent : colors.white}
@@ -100,43 +100,46 @@ const FeedPost = ({post, isVisible}: IFeedPost) => {
           <Feather
             name="bookmark"
             size={24}
-            style={{marginLeft: 'auto'}}
+            style={{ marginLeft: "auto" }}
             color={colors.white}
           />
         </View>
 
         {/* Likes */}
         <Text>
-          Liked by <Text style={styles.bold}>raghuvansiayush</Text> and{' '}
-          <Text style={{fontWeight: font.weight.bold}}>
+          Liked by <Text style={styles.bold}>raghuvansiayush</Text> and{" "}
+          <Text style={{ fontWeight: font.weight.bold }}>
             {post.nofLikes} others
           </Text>
         </Text>
 
         {/* Post Description */}
         <Text style={styles.text} numberOfLines={isDescriptionExpanded ? 0 : 3}>
-          <Text style={styles.bold}>{post.User?.username}</Text>{' '}
+          <Text style={styles.bold}>{post.User?.username}</Text>{" "}
           {post.description}
         </Text>
-        <Text onPress={toggleDescriptionExpanded} style={{color: colors.grey}}>
-          {isDescriptionExpanded ? 'see less' : 'see more'}
+        <Text
+          onPress={toggleDescriptionExpanded}
+          style={{ color: colors.grey }}
+        >
+          {isDescriptionExpanded ? "see less" : "see more"}
         </Text>
         {/* Comments */}
-        <Text style={{color: colors.grey}} onPress={navigateToComments}>
+        <Text style={{ color: colors.grey }} onPress={navigateToComments}>
           View all {post.nofComments} comments
         </Text>
         {(post.Comments?.items || []).map(
-          comment =>
+          (comment) =>
             comment && (
               <Comment
                 key={comment.id}
                 comment={comment}
                 includeDetails={false}
               />
-            ),
+            )
         )}
         {/* Posted Date */}
-        <Text style={{color: colors.grey}}>{post.createdAt}</Text>
+        <Text style={{ color: colors.grey }}>{post.createdAt}</Text>
       </View>
     </View>
   );
