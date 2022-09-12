@@ -6,7 +6,11 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Feather from "react-native-vector-icons/Feather";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import { Post } from "../../API";
+import {
+  CreateLikeMutation,
+  CreateLikeMutationVariables,
+  Post,
+} from "../../API";
 import { DEFAULT_USER_IMAGE } from "../../config";
 import colors from "../../theme/colors";
 import font from "../../theme/fonts";
@@ -18,6 +22,9 @@ import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
 import styles from "./styles";
 import PostMenu from "./PostMenu";
+import { useMutation } from "@apollo/client";
+import { createLike } from "./queries";
+import { useAuthContext } from "../../contexts/AuthContext";
 
 interface IFeedPost {
   post: Post;
@@ -26,8 +33,14 @@ interface IFeedPost {
 
 const FeedPost = ({ post, isVisible }: IFeedPost) => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [isLiked, setIsLiked] = useState(true);
+  const [isLiked, setIsLiked] = useState(false);
 
+  const { userId } = useAuthContext();
+  
+  const [runCreateLike] = useMutation<
+    CreateLikeMutation,
+    CreateLikeMutationVariables
+  >(createLike, { variables: { input: { userID: userId, postID: post.id } } });
   const navigation = useNavigation<FeedNavigationProp>();
 
   const navigateToUser = () => {
@@ -39,8 +52,8 @@ const FeedPost = ({ post, isVisible }: IFeedPost) => {
   const toggleDescriptionExpanded = () => {
     setIsDescriptionExpanded((v) => !v);
   };
-  const toggleLike = () => {
-    setIsLiked((v) => !v);
+  const toggleLike = async () => {
+    const response = await runCreateLike();
   };
 
   let content: JSX.Element | null = null;
@@ -71,7 +84,7 @@ const FeedPost = ({ post, isVisible }: IFeedPost) => {
         <Text onPress={navigateToUser} style={styles.username}>
           {post.User?.username}
         </Text>
-        <PostMenu post={post}/>
+        <PostMenu post={post} />
       </View>
       {content}
       <View style={styles.footer}>
