@@ -3,10 +3,12 @@ import {
     InMemoryCache,
     ApolloProvider,
     ApolloLink,
-    createHttpLink
+    createHttpLink,
+    TypePolicies
 } from '@apollo/client';
 import { createAuthLink, AuthOptions, AUTH_TYPE } from 'aws-appsync-auth-link';
 import { createSubscriptionHandshakeLink } from 'aws-appsync-subscription-link'
+import React from 'react';
 import config from '../aws-exports';
 
 
@@ -16,6 +18,29 @@ interface IClient {
 
 const url = config.aws_appsync_graphqlEndpoint;
 const region = config.aws_appsync_region;
+
+const mergeLists = (existing = {items: []}, incoming = {items: []}) => {
+  return {
+    ...existing,
+    ...incoming,
+    items: [...(existing.items || []), ...incoming.items],
+  };
+};
+
+const typePolicies: TypePolicies = {
+  Query: {
+    fields: {
+      commentsByPost: {
+        keyArgs: ['postID', 'createdAt', 'sortDirection', 'filter'],
+        merge: mergeLists,
+      },
+      postsByDate: {
+        keyArgs: ['type', 'createdAt', 'sortDirection', 'filter'],
+        merge: mergeLists,
+      },
+    },
+  },
+};
 
 const auth: AuthOptions = {
     type: config.aws_appsync_authenticationType as AUTH_TYPE.API_KEY,
@@ -30,7 +55,7 @@ const link = ApolloLink.from([
 ])
 const client = new ApolloClient({
     link,
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({typePolicies}),
 });
 
 const Client = ({ children }: IClient) => {

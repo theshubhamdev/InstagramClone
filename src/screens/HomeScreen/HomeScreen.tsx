@@ -6,11 +6,8 @@ import {
 } from "react-native";
 import FeedPost from "../../components/FeedPost";
 import { useRef, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useQuery } from "@apollo/client";
 import {
-  ListCommentsQueryVariables,
-  ListPostsQuery,
   ModelSortDirection,
   PostsByDateQuery,
   PostsByDateQueryVariables,
@@ -21,11 +18,12 @@ import React from "react";
 
 const HomeScreen = () => {
   const [activePostId, setActivePostId] = useState<string | null>(null);
-  const { data, loading, error, refetch } = useQuery<
+  const [isFetchingMore,setIsFetchingMore] = useState(false)
+  const { data, loading, error, refetch, fetchMore } = useQuery<
     PostsByDateQuery,
     PostsByDateQueryVariables
   >(postsByDate, {
-    variables: { type: "POST", sortDirection: ModelSortDirection.DESC },
+    variables: { type: "POST", sortDirection: ModelSortDirection.DESC, limit: 10 },
   });
 
   const viewabilityConfig: ViewabilityConfig = {
@@ -39,6 +37,18 @@ const HomeScreen = () => {
       }
     }
   );
+
+    const nextToken = data?.postsByDate?.nextToken;
+
+  const loadMore = async () => {
+    if (!nextToken || isFetchingMore) {
+      return;
+    }
+    setIsFetchingMore(true);
+    fetchMore({ variables: { nextToken } });
+    setIsFetchingMore(false);
+  };
+
   if (loading) {
     return <ActivityIndicator />;
   }
@@ -67,6 +77,7 @@ const HomeScreen = () => {
       onViewableItemsChanged={onViewableItemsChanged.current}
       refreshing={loading}
       onRefresh={refetch}
+      onEndReached={()=> loadMore()}
     />
   );
 };
