@@ -1,4 +1,5 @@
-import {Linking, StatusBar, View} from 'react-native';
+import "react-native-get-random-values";
+import { Linking, StatusBar } from 'react-native';
 import Navigation from './src/navigation';
 import Amplify from 'aws-amplify';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
