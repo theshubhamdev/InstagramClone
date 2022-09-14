@@ -1,9 +1,9 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import CommentsScreen from '../screens/CommentsScreen';
 import UserSearchScreen from '../screens/UserSearchScreen';
 import colors from '../theme/colors';
 import { SearchTabNavigatorParamList } from '../types/navigation';
+import HomeScreen from "../screens/HomeScreen";
 
 const Tab = createMaterialTopTabNavigator<SearchTabNavigatorParamList>();
 
@@ -16,7 +16,7 @@ const SearchTabNavigator = () => {
         tabBarIndicatorStyle: { backgroundColor: colors.primary }
     }}>
       <Tab.Screen name="Users" component={UserSearchScreen} />
-      <Tab.Screen name="Posts" component={CommentsScreen} />
+      <Tab.Screen name="Posts" component={HomeScreen} />
     </Tab.Navigator>
   );
 };

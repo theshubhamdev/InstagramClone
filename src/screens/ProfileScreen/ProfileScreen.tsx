@@ -16,6 +16,7 @@ import ApiErrorMessage from '../../components/ApiErrorMessage';
 import {GetUserQuery, GetUserQueryVariables} from '../../API';
 import { useAuthContext } from '../../contexts/AuthContext';
 import colors from '../../theme/colors';
+import React from 'react';
 
 const ProfileScreen = () => {
   const route = useRoute<UserProfileRouteProp | MyProfileRouteProp>();

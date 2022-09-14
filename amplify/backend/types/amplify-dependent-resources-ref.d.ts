@@ -12,7 +12,6 @@ export type AmplifyDependentResourcesAttributes = {
     },
     "api": {
         "Instagram": {
-            "GraphQLAPIKeyOutput": "string",
             "GraphQLAPIIdOutput": "string",
             "GraphQLAPIEndpointOutput": "string"
         }
@@ -22,6 +21,12 @@ export type AmplifyDependentResourcesAttributes = {
             "Name": "string",
             "Arn": "string",
             "LambdaExecutionRole": "string",
+            "Region": "string"
+        }
+    },
+    "storage": {
+        "storageInsta": {
+            "BucketName": "string",
             "Region": "string"
         }
     }
