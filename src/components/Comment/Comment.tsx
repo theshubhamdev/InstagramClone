@@ -5,7 +5,6 @@ import {Comment as CommentType} from '../../API';
 import colors from '../../theme/colors';
 import fonts from '../../theme/fonts';
 import dayjs from 'dayjs';
-import UserImage from '../UserImage';
 import React from 'react';
 import { DEFAULT_USER_IMAGE } from '../../config';
 
@@ -88,7 +87,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   footerText: {
-        color: colors.white,
+    color: colors.white,
     marginRight: 10,
   },
   new: {

@@ -90,7 +90,9 @@ const CameraScreen = () => {
     };
     try {
       const result = await camera.current.recordAsync(options);
-      console.log(result);
+      navigation.navigate('Create', {
+        video: result.uri,
+      });
     } catch (e) {
       console.log(e);
     }
@@ -105,14 +107,22 @@ const CameraScreen = () => {
 
   const openGallery = () => {
     launchImageLibrary(
-      { mediaType: "photo" },
+      { mediaType: "mixed", selectionLimit: 3 },
       ({ didCancel, errorCode, errorMessage, assets }) => {
         if (!didCancel && !errorCode && assets && assets.length > 0) {
-          navigation.navigate("Create", {
-            image: assets[0].uri,
-          });
+          const params: {image?: string; images?: string[]; video?: string} =
+            {};
+          if (assets.length === 1) {
+            const field = assets[0].type?.startsWith('video')
+              ? 'video'
+              : 'image';
+            params[field] = assets[0].uri;
+          } else if (assets.length > 1) {
+            params.images = assets.map(asset => asset.uri) as string[];
+          }
+          navigation.navigate('Create', params);
         }
-      }
+      },
     );
   };
 

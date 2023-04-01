@@ -5,18 +5,23 @@ import { CreateNavigationProp, CreateRouteProp } from "../../types/navigation";
 import Colors from "../../theme/colors";
 import Button from "../../components/Button";
 import { useMutation } from "@apollo/client";
-import { CreatePostInput, CreatePostMutation, CreatePostMutationVariables } from "../../API";
+import {
+  CreatePostInput,
+  CreatePostMutation,
+  CreatePostMutationVariables,
+} from "../../API";
 import { createPost } from "./queries";
 import { useAuthContext } from "../../contexts/AuthContext";
 import Carousel from "../../components/Carousel/Carousel";
 import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
 import { Storage } from "aws-amplify";
-import {v4 as uuidv4} from 'uuid'
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import { v4 as uuidv4 } from "uuid";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const CreatePostScreen = () => {
   const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [progress, setProgress] = useState(0);
   const { userId } = useAuthContext();
 
   const navigation = useNavigation<CreateNavigationProp>();
@@ -42,6 +47,10 @@ const CreatePostScreen = () => {
     if (isSubmitting) {
       return;
     }
+    if (!image && !images && !video) {
+      Alert.alert("Please select a media to upload");
+      return;
+    }
     setIsSubmitting(true);
     const input: CreatePostInput = {
       type: "POST",
@@ -54,12 +63,16 @@ const CreatePostScreen = () => {
       userID: userId,
     };
     // upload media to s3
-    if (!image) {
-      Alert.alert("Please select a media to upload")
-      return;
+    if (image) {
+      input.image = await uploadMedia(image);
+    } else if (images) {
+      const imageKeys = await Promise.all(
+        images.map((img) => uploadMedia(img))
+      );
+      input.images = imageKeys.filter((key) => key) as string[];
+    } else if (video) { 
+      input.video = await uploadMedia(video);
     }
-    const imageKey = await uploadMedia(image);
-    input.image = imageKey;
     try {
       await runCreatePost({ variables: { input } });
       setIsSubmitting(false);
@@ -78,8 +91,13 @@ const CreatePostScreen = () => {
       const blob = await response.blob();
       const uriParts = uri.split(".");
       const extention = uriParts[uriParts.length - 1];
+
       // upload the file (blob) to s3
-      const s3Response = await Storage.put(`${uuidv4()}.${extention}`, blob);
+      const s3Response = await Storage.put(`${uuidv4()}.${extention}`, blob,{
+        progressCallback(newProgress) {
+          setProgress(newProgress.loaded / newProgress.total);
+        },
+      });
       return s3Response.key;
     } catch (error) {
       Alert.alert("Error uploading the post", (error as Error).message);
@@ -98,8 +116,17 @@ const CreatePostScreen = () => {
         numberOfLines={5}
       />
       <View style={{ flexDirection: "row" }}>
-        <Button text={isSubmitting ? "Submitting" : "Submit"} onPress={submit} />
+        <Button
+          text={isSubmitting ? "Submitting" : "Submit"}
+          onPress={submit}
+        />
       </View>
+      {isSubmitting && (
+        <View style={styles.progressContainer}>
+          <View style={[styles.progress, {width: `${progress * 100}%`}]} />
+          <Text>Uploading {Math.floor(progress * 100)}%</Text>
+        </View>
+      )}
     </KeyboardAwareScrollView>
   );
 };
@@ -123,6 +150,22 @@ const styles = StyleSheet.create({
   content: {
     width: "100%",
     aspectRatio: 1,
+  },
+    progressContainer: {
+    backgroundColor: Colors.lightgrey,
+    width: '100%',
+    height: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 25,
+    marginVertical: 10,
+  },
+  progress: {
+    backgroundColor: Colors.primary,
+    position: 'absolute',
+    height: '100%',
+    alignSelf: 'flex-start',
+    borderRadius: 25,
   },
 });
 export default CreatePostScreen;

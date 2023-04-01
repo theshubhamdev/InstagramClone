@@ -4,9 +4,10 @@ buildscript {
     ext {
         buildToolsVersion = "30.0.2"
         minSdkVersion = 21
-        compileSdkVersion = 31
-        targetSdkVersion = 31
+        compileSdkVersion = 33
+        targetSdkVersion = 33
         ndkVersion = "21.4.7075529"
+        kotlin_version = '1.6.10'
     }
     repositories {
         google()
@@ -14,12 +15,18 @@ buildscript {
     }
     dependencies {
         classpath('com.android.tools.build:gradle:7.0.2')
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
 allprojects {
+    configurations.all {
+        resolutionStrategy {
+        force 'com.facebook.react:react-native:0.66.3'
+        }
+    }
     repositories {
         mavenCentral()
         mavenLocal()
@@ -35,11 +42,11 @@ allprojects {
         google()
         maven { url 'https://www.jitpack.io' }
 
-        jcenter() {
-            content {
-                includeModule("com.yqritc", "android-scalablevideoview")
-            }
-        }
+        // jcenter() {
+        //     content {
+        //         includeModule("com.yqritc", "android-scalablevideoview")
+        //     }
+        // }
         
         // * Add a new maven block after other repositories / blocks *
         maven {
