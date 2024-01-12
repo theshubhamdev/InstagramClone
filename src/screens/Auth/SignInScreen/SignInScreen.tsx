@@ -5,18 +5,19 @@ import {
   useWindowDimensions,
   ScrollView,
   Alert,
-} from 'react-native';
-import FormInput from '../components/FormInput';
-import CustomButton from '../components/CustomButton';
-import SocialSignInButtons from '../components/SocialSignInButtons';
-import {useNavigation} from '@react-navigation/native';
-import {useForm} from 'react-hook-form';
-import {SignInNavigationProp} from '../../../types/navigation';
-import {Auth} from 'aws-amplify';
-import {useState} from 'react';
-import { useAuthContext } from '../../../contexts/AuthContext';
-import colors from '../../../theme/colors';
-import React from 'react';
+} from "react-native";
+import FormInput from "../components/FormInput";
+import CustomButton from "../components/CustomButton";
+import SocialSignInButtons from "../components/SocialSignInButtons";
+import { useNavigation } from "@react-navigation/native";
+import { useForm } from "react-hook-form";
+import { SignInNavigationProp } from "../../../types/navigation";
+import { Auth } from "aws-amplify";
+import { useState } from "react";
+import { useAuthContext } from "../../../contexts/AuthContext";
+import colors from "../../../theme/colors";
+import React from "react";
+import Logo from "../../../assets/images/logo.png";
 
 type SignInData = {
   email: string;
@@ -24,24 +25,24 @@ type SignInData = {
 };
 
 const SignInScreen = () => {
-  const {height} = useWindowDimensions();
+  const { height } = useWindowDimensions();
   const navigation = useNavigation<SignInNavigationProp>();
   const [loading, setLoading] = useState(false);
-  
-  const {control, handleSubmit, reset} = useForm<SignInData>();
 
-  const onSignInPressed = async ({email, password}: SignInData) => {
+  const { control, handleSubmit, reset } = useForm<SignInData>();
+
+  const onSignInPressed = async ({ email, password }: SignInData) => {
     if (loading) {
       return;
     }
     setLoading(true);
     try {
-      await Auth.signIn(email, password);;
+      await Auth.signIn(email, password);
     } catch (e) {
-      if ((e as Error).name === 'UserNotConfirmedException') {
-        navigation.navigate('Confirm email', {email});
+      if ((e as Error).name === "UserNotConfirmedException") {
+        navigation.navigate("Confirm email", { email });
       } else {
-        Alert.alert('Oopps', (e as Error).message);
+        Alert.alert("Oopps", (e as Error).message);
       }
     } finally {
       setLoading(false);
@@ -50,19 +51,22 @@ const SignInScreen = () => {
   };
 
   const onForgotPasswordPressed = () => {
-    navigation.navigate('Forgot password');
+    navigation.navigate("Forgot password");
   };
 
   const onSignUpPress = () => {
-    navigation.navigate('Sign up');
+    navigation.navigate("Sign up");
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={{ backgroundColor: colors.white }}
+      showsVerticalScrollIndicator={false}
+    >
       <View style={styles.root}>
         <Image
-          source={{uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1280px-Instagram_logo.svg.png'}}
-          style={[styles.logo, {height: height * 0.3}]}
+          source={Logo}
+          style={[styles.logo, { height: height * 0.3 }]}
           resizeMode="contain"
         />
 
@@ -70,7 +74,7 @@ const SignInScreen = () => {
           name="email"
           placeholder="Email"
           control={control}
-          rules={{required: 'Email is required'}}
+          rules={{ required: "Email is required" }}
         />
 
         <FormInput
@@ -79,16 +83,16 @@ const SignInScreen = () => {
           secureTextEntry
           control={control}
           rules={{
-            required: 'Password is required',
+            required: "Password is required",
             minLength: {
               value: 3,
-              message: 'Password should be minimum 3 characters long',
+              message: "Password should be minimum 3 characters long",
             },
           }}
         />
 
         <CustomButton
-          text={loading ? 'Loading...' : 'Sign In'}
+          text={loading ? "Loading..." : "Sign In"}
           onPress={handleSubmit(onSignInPressed)}
         />
 
@@ -98,7 +102,7 @@ const SignInScreen = () => {
           type="TERTIARY"
         />
 
-        <SocialSignInButtons />
+        {/* <SocialSignInButtons /> */}
 
         <CustomButton
           text="Don't have an account? Create one"
@@ -112,15 +116,16 @@ const SignInScreen = () => {
 
 const styles = StyleSheet.create({
   root: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 20,
-    backgroundColor: colors.black,
-    flex:1
+    backgroundColor: colors.white,
+    flex: 1,
   },
   logo: {
-    width: '70%',
+    width: "70%",
     maxWidth: 300,
     maxHeight: 200,
+    backgroundColor: colors.white,
   },
 });
 

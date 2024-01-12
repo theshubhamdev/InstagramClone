@@ -1,5 +1,6 @@
 import {View, Text, Pressable} from 'react-native';
 import {ReactNode} from 'react';
+import React from 'react';
 
 interface IDoublePressable {
   onDoublePress?: () => void;

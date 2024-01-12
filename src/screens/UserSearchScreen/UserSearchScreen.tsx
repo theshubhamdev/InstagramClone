@@ -1,13 +1,14 @@
-import {ActivityIndicator, FlatList} from 'react-native';
-import React from 'react';
-import UserListItem from '../../components/UserListItem';
-import {useQuery} from '@apollo/client';
-import {listUsers} from './queries';
-import {ListLikesQueryVariables, ListUsersQuery} from '../../API';
-import ApiErrorMessage from '../../components/ApiErrorMessage';
+import { ActivityIndicator, FlatList, Platform } from "react-native";
+import React from "react";
+import UserListItem from "../../components/UserListItem";
+import { useQuery } from "@apollo/client";
+import { listUsers } from "./queries";
+import { ListLikesQueryVariables, ListUsersQuery } from "../../API";
+import ApiErrorMessage from "../../components/ApiErrorMessage";
+import colors from "../../theme/colors";
 
 const UserSearchScreen = () => {
-  const {data, loading, error, refetch} = useQuery<
+  const { data, loading, error, refetch } = useQuery<
     ListUsersQuery,
     ListLikesQueryVariables
   >(listUsers);
@@ -27,16 +28,16 @@ const UserSearchScreen = () => {
   }
 
   const users = (data?.listUsers?.items || []).filter(
-    user => user && !user._deleted,
+    (user) => user && !user._deleted
   );
 
   return (
     <FlatList
       data={users}
-      renderItem={({item}) => item && <UserListItem user={item} />}
+      renderItem={({ item }) => item && <UserListItem user={item} />}
       onRefresh={refetch}
       refreshing={loading}
-      style={{flex: 1}}
+      style={[{ flex: 1, backgroundColor: colors.black }]}
     />
   );
 };

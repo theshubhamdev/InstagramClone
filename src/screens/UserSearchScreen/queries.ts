@@ -10,7 +10,6 @@ export const listUsers = gql`
       items {
         id
         name
-        email
         username
         image
         createdAt

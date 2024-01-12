@@ -3,7 +3,6 @@
   "serviceConfiguration": {
     "apiName": "Instagram",
     "serviceName": "AppSync",
-    "gqlSchemaPath": "/Users/jordanrock/Documents/Projects/InstagramClone/amplify/backend/api/Instagram/schema.graphql",
     "defaultAuthType": {
       "mode": "AMAZON_COGNITO_USER_POOLS",
       "cognitoUserPoolId": "authInstagram"

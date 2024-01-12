@@ -1,8 +1,8 @@
-import {View, Text, StyleSheet, Image} from 'react-native';
-import React from 'react';
-import image from './error.png';
-import colors from '../../theme/colors';
-import Button from '../Button';
+import { View, Text, StyleSheet, Image } from "react-native";
+import React from "react";
+import image from "./error.png";
+import colors from "../../theme/colors";
+import Button from "../Button";
 
 interface ApiErrorMessageProps {
   title?: string;
@@ -11,8 +11,8 @@ interface ApiErrorMessageProps {
 }
 
 const ApiErrorMessage = ({
-  title = 'Error',
-  message = 'Unknown Error',
+  title = "Error",
+  message = "Unknown Error",
   onRetry = () => {},
 }: ApiErrorMessageProps) => {
   return (
@@ -20,7 +20,9 @@ const ApiErrorMessage = ({
       <Image source={image} style={styles.image} resizeMode="contain" />
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.message}>{message}</Text>
-      <Button text="Retry" onPress={onRetry} />
+      <View style={[{width: 100, height: 50}]}>
+        <Button text="Retry" onPress={onRetry} />
+      </View>
     </View>
   );
 };
@@ -28,11 +30,12 @@ const ApiErrorMessage = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     padding: 10,
+    backgroundColor: colors.black
   },
   image: {
-    width: '70%',
+    width: "70%",
     height: 200,
   },
   title: {

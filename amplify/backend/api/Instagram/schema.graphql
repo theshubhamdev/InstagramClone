@@ -79,3 +79,4 @@ type Subscription {
   onCreateCommentByPostId(postID: ID!): Comment
     @aws_subscribe(mutations: ["createComment"])
 }
+ 

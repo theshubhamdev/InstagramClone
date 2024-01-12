@@ -1,16 +1,16 @@
-import {View, Text, StyleSheet, ScrollView, Alert} from 'react-native';
-import FormInput from '../components/FormInput';
-import CustomButton from '../components/CustomButton';
-import SocialSignInButtons from '../components/SocialSignInButtons';
-import {useNavigation} from '@react-navigation/core';
-import {useForm} from 'react-hook-form';
-import {SignUpNavigationProp} from '../../../types/navigation';
-import colors from '../../../theme/colors';
-import {Auth} from 'aws-amplify';
-import {useState} from 'react';
+import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
+import FormInput from "../components/FormInput";
+import CustomButton from "../components/CustomButton";
+import SocialSignInButtons from "../components/SocialSignInButtons";
+import { useNavigation } from "@react-navigation/core";
+import { useForm } from "react-hook-form";
+import { SignUpNavigationProp } from "../../../types/navigation";
+import colors from "../../../theme/colors";
+import { Auth } from "aws-amplify";
+import { useState } from "react";
+import React from "react";
 
-const EMAIL_REGEX =
-  /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 type SignUpData = {
   name: string;
@@ -20,12 +20,12 @@ type SignUpData = {
 };
 
 const SignUpScreen = () => {
-  const {control, handleSubmit, watch} = useForm<SignUpData>();
-  const pwd = watch('password');
+  const { control, handleSubmit, watch } = useForm<SignUpData>();
+  const pwd = watch("password");
   const navigation = useNavigation<SignUpNavigationProp>();
   const [loading, setLoading] = useState(false);
 
-  const onRegisterPressed = async ({name, email, password}: SignUpData) => {
+  const onRegisterPressed = async ({ name, email, password }: SignUpData) => {
     if (loading) {
       return;
     }
@@ -35,31 +35,34 @@ const SignUpScreen = () => {
       await Auth.signUp({
         username: email,
         password,
-        attributes: {name, email},
+        attributes: { name, email },
       });
 
-      navigation.navigate('Confirm email', {email});
+      navigation.navigate("Confirm email", { email });
     } catch (e) {
-      Alert.alert('Oops', (e as Error).message);
+      Alert.alert("Oops", (e as Error).message);
     } finally {
       setLoading(false);
     }
   };
 
   const onSignInPress = () => {
-    navigation.navigate('Sign in');
+    navigation.navigate("Sign in");
   };
 
   const onTermsOfUsePressed = () => {
-    console.warn('onTermsOfUsePressed');
+    console.warn("onTermsOfUsePressed");
   };
 
   const onPrivacyPressed = () => {
-    console.warn('onPrivacyPressed');
+    console.warn("onPrivacyPressed");
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={{ backgroundColor: colors.white }}
+      showsVerticalScrollIndicator={false}
+    >
       <View style={styles.root}>
         <Text style={styles.title}>Create an account</Text>
 
@@ -68,14 +71,14 @@ const SignUpScreen = () => {
           control={control}
           placeholder="Full name"
           rules={{
-            required: 'Name is required',
+            required: "Name is required",
             minLength: {
               value: 3,
-              message: 'Name should be at least 3 characters long',
+              message: "Name should be at least 3 characters long",
             },
             maxLength: {
               value: 24,
-              message: 'Name should be max 24 characters long',
+              message: "Name should be max 24 characters long",
             },
           }}
         />
@@ -85,8 +88,8 @@ const SignUpScreen = () => {
           control={control}
           placeholder="Email"
           rules={{
-            required: 'Email is required',
-            pattern: {value: EMAIL_REGEX, message: 'Email is invalid'},
+            required: "Email is required",
+            pattern: { value: EMAIL_REGEX, message: "Email is invalid" },
           }}
         />
         <FormInput
@@ -95,10 +98,10 @@ const SignUpScreen = () => {
           placeholder="Password"
           secureTextEntry
           rules={{
-            required: 'Password is required',
+            required: "Password is required",
             minLength: {
               value: 8,
-              message: 'Password should be at least 8 characters long',
+              message: "Password should be at least 8 characters long",
             },
           }}
         />
@@ -109,27 +112,27 @@ const SignUpScreen = () => {
           secureTextEntry
           rules={{
             validate: (value: string) =>
-              value === pwd || 'Password do not match',
+              value === pwd || "Password do not match",
           }}
         />
 
         <CustomButton
-          text={loading ? 'Loading...' : 'Register'}
+          text={loading ? "Loading..." : "Register"}
           onPress={handleSubmit(onRegisterPressed)}
         />
 
         <Text style={styles.text}>
-          By registering, you confirm that you accept our{' '}
+          By registering, you confirm that you accept our{" "}
           <Text style={styles.link} onPress={onTermsOfUsePressed}>
             Terms of Use
-          </Text>{' '}
-          and{' '}
+          </Text>{" "}
+          and{" "}
           <Text style={styles.link} onPress={onPrivacyPressed}>
             Privacy Policy
           </Text>
         </Text>
 
-        <SocialSignInButtons />
+        {/* <SocialSignInButtons /> */}
 
         <CustomButton
           text="Have an account? Sign in"
@@ -143,19 +146,19 @@ const SignUpScreen = () => {
 
 const styles = StyleSheet.create({
   root: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 20,
-    backgroundColor: colors.black,
-    flex:1
+    backgroundColor: colors.white,
+    flex: 1,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.white,
     margin: 10,
   },
   text: {
-    color: 'gray',
+    color: "gray",
     marginVertical: 10,
   },
   link: {

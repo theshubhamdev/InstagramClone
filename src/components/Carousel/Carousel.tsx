@@ -54,6 +54,7 @@ const Carousel = ({images, onDoublePress = () => {}}: ICarousel) => {
         }}>
         {images.map((_, index) => (
           <View
+            key={index}
             style={{
               width: 10,
               borderRadius: 5,

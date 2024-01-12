@@ -15,15 +15,21 @@ import {
 import { postsByDate } from "./queries";
 import ApiErrorMessage from "../../components/ApiErrorMessage";
 import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import colors from "../../theme/colors";
 
 const HomeScreen = () => {
   const [activePostId, setActivePostId] = useState<string | null>(null);
-  const [isFetchingMore,setIsFetchingMore] = useState(false)
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const { data, loading, error, refetch, fetchMore } = useQuery<
     PostsByDateQuery,
     PostsByDateQueryVariables
   >(postsByDate, {
-    variables: { type: "POST", sortDirection: ModelSortDirection.DESC, limit: 10 },
+    variables: {
+      type: "POST",
+      sortDirection: ModelSortDirection.DESC,
+      limit: 10,
+    },
   });
 
   const viewabilityConfig: ViewabilityConfig = {
@@ -38,7 +44,7 @@ const HomeScreen = () => {
     }
   );
 
-    const nextToken = data?.postsByDate?.nextToken;
+  const nextToken = data?.postsByDate?.nextToken;
 
   const loadMore = async () => {
     if (!nextToken || isFetchingMore) {
@@ -77,7 +83,8 @@ const HomeScreen = () => {
       onViewableItemsChanged={onViewableItemsChanged.current}
       refreshing={loading}
       onRefresh={refetch}
-      onEndReached={()=> loadMore()}
+      onEndReached={() => loadMore()}
+      style={{ backgroundColor: colors.black }}
     />
   );
 };

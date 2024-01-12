@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, Platform } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Camera,
@@ -67,7 +67,7 @@ const CameraScreen = () => {
     }
 
     const options: CameraPictureOptions = {
-      quality: 0.5,
+      quality: 0.1,
       base64: false,
       skipProcessing: true,
     };
@@ -90,7 +90,7 @@ const CameraScreen = () => {
     };
     try {
       const result = await camera.current.recordAsync(options);
-      navigation.navigate('Create', {
+      navigation.navigate("Create", {
         video: result.uri,
       });
     } catch (e) {
@@ -110,19 +110,22 @@ const CameraScreen = () => {
       { mediaType: "mixed", selectionLimit: 3 },
       ({ didCancel, errorCode, errorMessage, assets }) => {
         if (!didCancel && !errorCode && assets && assets.length > 0) {
-          const params: {image?: string; images?: string[]; video?: string} =
-            {};
+          const params: {
+            image?: string;
+            images?: string[];
+            video?: string;
+          } = {};
           if (assets.length === 1) {
-            const field = assets[0].type?.startsWith('video')
-              ? 'video'
-              : 'image';
+            const field = assets[0].type?.startsWith("video")
+              ? "video"
+              : "image";
             params[field] = assets[0].uri;
           } else if (assets.length > 1) {
-            params.images = assets.map(asset => asset.uri) as string[];
+            params.images = assets.map((asset) => asset.uri) as string[];
           }
-          navigation.navigate('Create', params);
+          navigation.navigate("Create", params);
         }
-      },
+      }
     );
   };
 
@@ -135,7 +138,7 @@ const CameraScreen = () => {
   }
 
   return (
-    <View style={styles.page}>
+    <View style={[styles.page, Platform.OS === "ios" && { marginTop: 50 }]}>
       <Camera
         ref={camera}
         style={styles.camera}
